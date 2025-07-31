@@ -1,7 +1,7 @@
 const { Collection } = require("discord.js");
 const path = require("node:path");
-const { getCommandFiles } = require("../utils/discordCommandUtils");
-const log = require("../utils/loggerUtils");
+const { getCommandFiles } = require("../utils/discordCommands");
+const log = require("../utils/logger");
 
 function loadCommands(client) {
   const commandsDir = path.join(__dirname, "../bot/commands");

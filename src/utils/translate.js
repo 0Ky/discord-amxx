@@ -1,5 +1,5 @@
 const axios = require("axios");
-const log = require("./loggerUtils");
+const log = require("./logger");
 
 async function translateMessage(text, targetLang = "en") {
   try {

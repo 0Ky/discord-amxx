@@ -1,7 +1,7 @@
 const NodeCache = require('node-cache');
 const axios = require('axios');
 const { XMLParser } = require('fast-xml-parser');
-const log = require('./loggerUtils');
+const log = require('./logger');
 
 const avatarCache = new NodeCache({ stdTTL: 3600, checkperiod: 600 });
 

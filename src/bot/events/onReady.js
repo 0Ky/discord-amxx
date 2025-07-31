@@ -1,4 +1,4 @@
-const log = require("../../utils/loggerUtils");
+const log = require("../../utils/logger");
 const { startTCPServer } = require("../../tcp-server/server/tcpServer");
 const discordUpdateMemberCount = require('../../utils/discordUpdateMemberCount');
 

@@ -1,4 +1,4 @@
-const log = require('./loggerUtils');
+const log = require('./logger');
 const { MessageTypeNames } = require('../config/config');
 const gameServer = require('../tcp-server/server/handlers/gameServer');
 

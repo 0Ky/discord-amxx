@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const crypto = require("crypto");
 const { keccak256 } = require("js-sha3");
 const NodeCache = require("node-cache");
-const log = require("../../../utils/loggerUtils");
+const log = require("../../../utils/logger");
 const {
   MessageType,
   HOST,
@@ -16,10 +16,10 @@ const {
   HLDS_MAXPLAYERS,
   DISCORD_SERVER_ID,
 } = require("../../../config/config");
-const { fullwidthToASCII } = require('../../../utils/fullwidthToASCIIUtils');
-const { translateMessage } = require("../../../utils/translateUtils");
+const { fullwidthToASCII } = require('../../../utils/fullwidthToASCII');
+const { translateMessage } = require("../../../utils/translate");
 const { formatChatMessage } = require("../../../utils/formatChatMessage");
-const { sendMessageToGameServer } = require("../../../utils/discordMsgToGameServerUtils");
+const { sendMessageToGameServer } = require("../../../utils/discordMsgToGameServer");
 const { updateChannelName } = require("../../../utils/updateChannelName");
 const { getLinkCode, removeLinkCode, clearCache } = require("../../../utils/linkCodeManager");
 const { addVerifiedAccount, isSteamIdVerified } = require("../../../utils/verifiedAccountsManager");

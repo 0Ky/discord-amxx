@@ -1,7 +1,7 @@
 const { EmbedBuilder, escapeMarkdown } = require("discord.js");
 const SteamID = require("steamid");
-const { getCountryCode } = require("./countryCodeUtils");
-const { getSteamAvatar } = require("./steamAvatarUtils");
+const { getCountryCode } = require("./countryCodes");
+const { getSteamAvatar } = require("./steamAvatars");
 const { getUserColor } = require("./colorManager");
 const { HLDS_HOSTNAME } = require("../config/config");
 

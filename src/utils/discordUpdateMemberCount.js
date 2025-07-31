@@ -1,6 +1,6 @@
 const { Client } = require("discord.js");
 const { DISCORD_SERVER_ID, DISCORD_CHANNEL_MEMBERS } = require("../config/config");
-const log = require("./loggerUtils");
+const log = require("./logger");
 const { updateChannelName } = require("./updateChannelName");
 
 module.exports = async (clientOrMember) => {

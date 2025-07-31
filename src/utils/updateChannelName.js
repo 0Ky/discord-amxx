@@ -1,4 +1,4 @@
-const log = require("./loggerUtils");
+const log = require("./logger");
 const { RateLimitError } = require('discord.js');
 
 // A map to hold queues for channels

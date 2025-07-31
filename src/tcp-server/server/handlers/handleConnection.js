@@ -1,4 +1,4 @@
-const log = require("../../../utils/loggerUtils");
+const log = require("../../../utils/logger");
 const handleMessage = require("./handleMessage");
 const gameServer = require("./gameServer");
 const { HOST } = require("../../../config/config");

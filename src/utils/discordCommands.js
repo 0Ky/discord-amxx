@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const log = require('./loggerUtils');
+const log = require('./logger');
 
 function getCommandFiles(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });

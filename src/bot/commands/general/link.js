@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
-const log = require("../../../utils/loggerUtils");
+const log = require("../../../utils/logger");
 const { v4: uuidv4 } = require("uuid");
 const linkCodeManager = require("../../../utils/linkCodeManager");
 const verifiedAccountsManager = require("../../../utils/verifiedAccountsManager");

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const log = require("./loggerUtils");
+const log = require("./logger");
 
 const verifiedAccountsFilePath = path.join(__dirname, "../../data/verifiedAccounts.json");
 let verifiedAccountsCache = [];

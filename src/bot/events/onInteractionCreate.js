@@ -1,5 +1,5 @@
 const { Collection, MessageFlags } = require("discord.js");
-const log = require("../../utils/loggerUtils");
+const log = require("../../utils/logger");
 
 module.exports = async (interaction) => {
   if (!interaction.isChatInputCommand()) return;

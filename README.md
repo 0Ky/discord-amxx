@@ -76,4 +76,4 @@ The bot is configured using environment variables. You can set them in a `.env` 
 
 ## License
 
-This project is licensed under the No Warranty Public License. - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the _No Warranty Public License_. See the [LICENSE](LICENSE) file for details.

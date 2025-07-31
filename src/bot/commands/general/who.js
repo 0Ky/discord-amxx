@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require("discord.js");
-const { readVerifiedAccounts } = require("../../../shared/verifiedAccountsManager");
+const { getVerifiedAccounts } = require("../../../shared/verifiedAccountsManager");
 const { HLDS_HOSTNAME } = require("../../../config/config");
 
 module.exports = {
@@ -19,13 +19,15 @@ module.exports = {
     const steamid = interaction.options.getString("steamid");
 
     if (!mention && !steamid) {
-      return interaction.reply({
+      interaction.reply({
         content: "Please provide a search option mention or steamid.",
         flags: MessageFlags.Ephemeral,
       });
+      interaction.client.interactions.delete(interaction.id);
+      return;
     }
 
-    const accounts = readVerifiedAccounts();
+    const accounts = getVerifiedAccounts();
     let account;
 
     if (mention) {
@@ -51,5 +53,6 @@ module.exports = {
     } else {
       await interaction.reply("User is not verified.");
     }
+    interaction.client.interactions.delete(interaction.id);
   },
 };

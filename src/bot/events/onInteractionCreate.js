@@ -1,4 +1,4 @@
-const { Collection, MessageFlags} = require("discord.js");
+const { Collection, MessageFlags } = require("discord.js");
 const log = require("../../shared/loggerUtils");
 
 module.exports = async (interaction) => {
@@ -45,7 +45,17 @@ module.exports = async (interaction) => {
     log.debug(`User ${interaction.user.username} used '/${interaction.commandName}' (/) command`);
     interaction.client.interactions.set(interaction.id, interaction);
     await command.execute(interaction);
+    // breaks /players interaction because we defer reply
     // interaction.client.interactions.delete(interaction.id);
+
+    // fallback cleanup
+    setTimeout(() => {
+      if (interaction.client.interactions.has(interaction.id)) {
+        interaction.client.interactions.delete(interaction.id);
+        log.debug(`Cleaned up interaction ${interaction.id} after timeout`);
+      }
+    }, 60 * 1000); // 1 minute
+
   } catch (error) {
     log.error(`Error executing command '/${interaction.commandName}': ${error.message}`);
     await interaction.reply({ content: "There was an error executing this command.", flags: MessageFlags.Ephemeral });

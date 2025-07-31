@@ -17,7 +17,7 @@ module.exports = async (msg) => {
 
     const socket = gameServer.getGameServerSocket(); // Get the game server socket from the singleton
     if (socket) {
-      sendMessageToGameServer(socket, message); // Send message with the socket
+      sendMessageToGameServer(message); // Send message with the socket
     } else {
       log.warn('Game server socket is not available');
     }

@@ -21,9 +21,14 @@ function hasLinkCode(code) {
     return linkCodeCache.has(code);
 }
 
+function clearCache() {
+    linkCodeCache.flushAll();
+}
+
 module.exports = {
     addLinkCode,
     getLinkCode,
     removeLinkCode,
     hasLinkCode,
+    clearCache,
 };

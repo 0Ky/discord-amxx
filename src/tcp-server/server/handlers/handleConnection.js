@@ -5,21 +5,13 @@ const { HOST } = require("../../../config/config");
 
 const clients = {};
 let isConnectionActive = false;
-let lastConnectionTimestamp = 0;
 
-function handleConnection(socket, client) {
+function handleConnection(client) {
+  const socket = gameServer.getGameServerSocket();
   const ip = socket.remoteAddress;
-  const currentTimestamp = Date.now();
 
   if (isConnectionActive) {
     log.warn(`Rejected connection from ${ip}: A connection is already active.`);
-    socket.destroy();
-    return;
-  }
-
-  if (currentTimestamp - lastConnectionTimestamp < 5000) {
-    // 5 seconds threshold
-    log.warn(`Rejected connection from ${ip}: Possible replay attack.`);
     socket.destroy();
     return;
   }
@@ -68,7 +60,6 @@ function handleConnection(socket, client) {
 
   // log.info("Game server connection established");
   isConnectionActive = true;
-  lastConnectionTimestamp = currentTimestamp;
   gameServer.setGameServerSocket(socket);
   socket.setEncoding("utf8");
 
@@ -76,11 +67,12 @@ function handleConnection(socket, client) {
   socket.clientData = clientData;
   socket.authTimeout = authTimeout;
 
-  socket.on("data", (data) => handleMessage(data, client, socket));
+  socket.on("data", (data) => handleMessage(data, client));
 
   socket.on("end", () => {
     clearTimeout(authTimeout);
     isConnectionActive = false;
+    delete clients[ip];
     log.info("Game server connection ended");
     gameServer.setGameServerSocket(null);
   });
@@ -88,6 +80,7 @@ function handleConnection(socket, client) {
   socket.on("error", (err) => {
     clearTimeout(authTimeout);
     isConnectionActive = false;
+    delete clients[ip];
     if (err.code === "ECONNRESET") {
       log.error("Game server connection lost");
     } else {
@@ -98,6 +91,7 @@ function handleConnection(socket, client) {
 
   socket.on("close", () => {
     clearTimeout(authTimeout);
+    delete clients[ip];
   });
 }
 

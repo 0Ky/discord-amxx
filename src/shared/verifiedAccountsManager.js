@@ -1,53 +1,61 @@
 const fs = require("fs");
 const path = require("path");
+const log = require("./loggerUtils");
 
 const verifiedAccountsFilePath = path.join(__dirname, "../../data/verifiedAccounts.json");
+let verifiedAccountsCache = [];
 
-function readVerifiedAccounts() {
+function loadVerifiedAccounts() {
     try {
         if (!fs.existsSync(verifiedAccountsFilePath)) {
-            return [];
+            verifiedAccountsCache = [];
+            return;
         }
         const data = fs.readFileSync(verifiedAccountsFilePath, "utf-8");
-        return JSON.parse(data);
+        verifiedAccountsCache = JSON.parse(data);
+        log.info("Verified accounts loaded successfully.");
     } catch (error) {
-        console.error("Error reading verified accounts:", error.message);
-        return [];
+        log.error(`Error loading verified accounts: ${error.message}`);
+        verifiedAccountsCache = [];
     }
 }
 
-function writeVerifiedAccounts(accounts) {
+function saveVerifiedAccounts() {
     try {
         const dir = path.dirname(verifiedAccountsFilePath);
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
-
-        fs.writeFileSync(verifiedAccountsFilePath, JSON.stringify(accounts, null, 4), "utf-8");
+        fs.writeFileSync(verifiedAccountsFilePath, JSON.stringify(verifiedAccountsCache, null, 4), "utf-8");
     } catch (error) {
-        console.error("Error writing verified accounts:", error.message);
+        log.error(`Error saving verified accounts: ${error.message}`);
     }
 }
 
+function getVerifiedAccounts() {
+    return verifiedAccountsCache;
+}
+
 function addVerifiedAccount(account) {
-    const accounts = readVerifiedAccounts();
-    accounts.push(account);
-    writeVerifiedAccounts(accounts);
+    verifiedAccountsCache.push(account);
+    saveVerifiedAccounts();
 }
 
 function isSteamIdVerified(steamId) {
-    const accounts = readVerifiedAccounts();
-    return accounts.some((account) => account.steamId === steamId);
+    return verifiedAccountsCache.some((account) => account.steamId === steamId);
 }
 
 function isDiscordIdVerified(discordId) {
-    const accounts = readVerifiedAccounts();
-    return accounts.some((account) => account.discordId === discordId);
+    return verifiedAccountsCache.some((account) => account.discordId === discordId);
 }
 
+// Load accounts at startup
+loadVerifiedAccounts();
+
 module.exports = {
-    readVerifiedAccounts,
-    writeVerifiedAccounts,
+    loadVerifiedAccounts,
+    saveVerifiedAccounts,
+    getVerifiedAccounts,
     addVerifiedAccount,
     isSteamIdVerified,
     isDiscordIdVerified,

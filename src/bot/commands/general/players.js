@@ -30,7 +30,7 @@ module.exports = {
       command: 'players',
     };
 
-    sendMessageToGameServer(socket, message);
+    sendMessageToGameServer(message);
     log.debug('Sent /players request to the game server');
   },
 };

@@ -21,7 +21,7 @@ const { translateMessage } = require("../../../shared/translateUtils");
 const { formatChatMessage } = require("../../../shared/formatChatMessage");
 const { sendMessageToGameServer } = require("../../../shared/discordMsgToGameServerUtils");
 const { updateChannelName } = require("../../../shared/updateChannelName");
-const { getLinkCode, removeLinkCode } = require("../../../shared/linkCodeManager");
+const { getLinkCode, removeLinkCode, clearCache } = require("../../../shared/linkCodeManager");
 const { addVerifiedAccount, isSteamIdVerified } = require("../../../shared/verifiedAccountsManager");
 
 const { validate: validateUUID } = require('uuid');
@@ -31,7 +31,7 @@ let maxPlayers = HLDS_MAXPLAYERS || "0";
 let playersNum = "0";
 const avatarCache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 }); // 6 hours TTL, checks every 60 minutes
 
-async function handleMessage(data, client, socket) {
+async function handleMessage(data, client) {
   try {
     const message = data.toString().trim();
     log.debug(`Received raw data: ${message}`);
@@ -46,6 +46,7 @@ async function handleMessage(data, client, socket) {
 
     switch (parsed.type) {
       case MessageType.MSG_HANDSHAKE: {
+        const socket = gameServer.getGameServerSocket();
         const ip = socket.remoteAddress;
 
         if (parsed.status === "HANDSHAKE_HELLO") {
@@ -64,7 +65,7 @@ async function handleMessage(data, client, socket) {
             challenge: challenge
           };
 
-          sendMessageToGameServer(socket, challengeMessage);
+          sendMessageToGameServer(challengeMessage);
           log.info(`Sent handshake challenge to ${ip}: ${challenge}`);
 
         } else if (parsed.status === "HANDSHAKE_CHALLENGE") {
@@ -83,7 +84,7 @@ async function handleMessage(data, client, socket) {
             socket.isAuthenticated = true;
 
             // Send success response
-            sendMessageToGameServer(socket, {
+            sendMessageToGameServer({
               type: MessageType.MSG_HANDSHAKE,
               status: "HANDSHAKE_OK",
             });
@@ -94,7 +95,7 @@ async function handleMessage(data, client, socket) {
 
           } else {
             log.warn(`Failed handshake authentication attempt from ${ip}`);
-            sendMessageToGameServer(socket, {
+            sendMessageToGameServer({
               type: MessageType.MSG_HANDSHAKE,
               status: "HANDSHAKE_REJECT",
             });
@@ -255,18 +256,16 @@ async function handleMessage(data, client, socket) {
                   verifiedAt: new Date().toString(), // Timestamp
                 });
                 removeLinkCode(code); // Remove the used code
+                clearCache(); // Clear the entire cache after successful verification
 
                 // await member.send("Your Steam account has been successfully linked to your Discord account!");
                 await channel.send(`:link: User <@${member.user.id}> successfully linked \`${steamId}\` steam account.`);
 
-                const socket = gameServer.getGameServerSocket();
-                if (socket) {
-                  sendMessageToGameServer(socket, {
-                    type: MessageType.MSG_LINK,
-                    authid: steamId,
-                    message: `Steam ID ${steamId} successfully linked with Discord user ${member.user.tag}.`,
-                  });
-                }
+                sendMessageToGameServer({
+                  type: MessageType.MSG_LINK,
+                  authid: steamId,
+                  message: `Steam ID ${steamId} successfully linked with Discord user ${member.user.tag}.`,
+                });
               }
             } catch (error) {
               log.error(`Error linking Steam ID ${steamId} with Discord user ${userId}: ${error.message}`);

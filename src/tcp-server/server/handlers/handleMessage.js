@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const crypto = require("crypto");
 const { keccak256 } = require("js-sha3");
 const NodeCache = require("node-cache");
-const log = require("../../../shared/loggerUtils");
+const log = require("../../../utils/loggerUtils");
 const {
   MessageType,
   HOST,
@@ -16,13 +16,13 @@ const {
   HLDS_MAXPLAYERS,
   DISCORD_SERVER_ID,
 } = require("../../../config/config");
-const { fullwidthToASCII } = require('../../../shared/fullwidthToASCIIUtils');
-const { translateMessage } = require("../../../shared/translateUtils");
-const { formatChatMessage } = require("../../../shared/formatChatMessage");
-const { sendMessageToGameServer } = require("../../../shared/discordMsgToGameServerUtils");
-const { updateChannelName } = require("../../../shared/updateChannelName");
-const { getLinkCode, removeLinkCode, clearCache } = require("../../../shared/linkCodeManager");
-const { addVerifiedAccount, isSteamIdVerified } = require("../../../shared/verifiedAccountsManager");
+const { fullwidthToASCII } = require('../../../utils/fullwidthToASCIIUtils');
+const { translateMessage } = require("../../../utils/translateUtils");
+const { formatChatMessage } = require("../../../utils/formatChatMessage");
+const { sendMessageToGameServer } = require("../../../utils/discordMsgToGameServerUtils");
+const { updateChannelName } = require("../../../utils/updateChannelName");
+const { getLinkCode, removeLinkCode, clearCache } = require("../../../utils/linkCodeManager");
+const { addVerifiedAccount, isSteamIdVerified } = require("../../../utils/verifiedAccountsManager");
 
 const { validate: validateUUID } = require('uuid');
 const gameServer = require("./gameServer"); // Import gameServer singleton

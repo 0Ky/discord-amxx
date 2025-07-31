@@ -1,9 +1,9 @@
 const { REST, Routes } = require("discord.js");
 const { DISCORD_TOKEN, DISCORD_CLIENT_ID, DISCORD_SERVER_ID } = require("../config/config");
-const { getCommandFiles } = require("../shared/discordCommandUtils");
+const { getCommandFiles } = require("../utils/discordCommandUtils");
 const fs = require("node:fs");
 const path = require("node:path");
-const log = require("../shared/loggerUtils");
+const log = require("../utils/loggerUtils");
 const assert = require("assert");
 
 function compareOptions(commandOptions, existingCommandOptions) {

@@ -1,5 +1,5 @@
-const log = require('../../shared/loggerUtils');
-const { sendMessageToGameServer } = require('../../shared/discordMsgToGameServerUtils');
+const log = require('../../utils/loggerUtils');
+const { sendMessageToGameServer } = require('../../utils/discordMsgToGameServerUtils');
 const { DISCORD_CHANNEL_CHAT, MessageType } = require('../../config/config');
 const gameServer = require('../../tcp-server/server/handlers/gameServer'); // Import gameServer singleton
 

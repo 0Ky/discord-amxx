@@ -3,7 +3,7 @@ const { DISCORD_TOKEN } = require("./config/config");
 const { loadCommands } = require("./loaders/commandLoader");
 const { loadEvents } = require("./loaders/eventLoader");
 const registerCommands = require("./bot/registerCommands");
-const log = require("./shared/loggerUtils");
+const log = require("./utils/loggerUtils");
 
 const client = new Client({
   intents: [

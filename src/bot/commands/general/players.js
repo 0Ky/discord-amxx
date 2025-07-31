@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const { MessageType } = require('../../../config/config');
-const { sendMessageToGameServer } = require('../../../shared/discordMsgToGameServerUtils');
+const { sendMessageToGameServer } = require('../../../utils/discordMsgToGameServerUtils');
 const gameServer = require('../../../tcp-server/server/handlers/gameServer');
-const log = require('../../../shared/loggerUtils');
+const log = require('../../../utils/loggerUtils');
 
 module.exports = {
   cooldown: 3,

@@ -1,6 +1,6 @@
-const log = require("../../shared/loggerUtils");
+const log = require("../../utils/loggerUtils");
 const { startTCPServer } = require("../../tcp-server/server/tcpServer");
-const discordUpdateMemberCount = require('../../shared/discordUpdateMemberCount');
+const discordUpdateMemberCount = require('../../utils/discordUpdateMemberCount');
 
 module.exports = (client) => {
   client.user.setActivity("✨ !help for a list of commands!", { type: 4 });

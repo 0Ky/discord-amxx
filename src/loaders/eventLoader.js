@@ -1,7 +1,7 @@
 const onReady = require("../bot/events/onReady");
 const onInteractionCreate = require("../bot/events/onInteractionCreate");
 const onMessageCreate = require("../bot/events/onMessageCreate");
-const discordUpdateMemberCount = require("../shared/discordUpdateMemberCount");
+const discordUpdateMemberCount = require("../utils/discordUpdateMemberCount");
 
 function loadEvents(client) {
   client.once("ready", onReady);

@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("discord.js");
-const log = require("../../../shared/loggerUtils");
+const log = require("../../../utils/loggerUtils");
 const { v4: uuidv4 } = require("uuid");
-const linkCodeManager = require("../../../shared/linkCodeManager");
-const verifiedAccountsManager = require("../../../shared/verifiedAccountsManager");
+const linkCodeManager = require("../../../utils/linkCodeManager");
+const verifiedAccountsManager = require("../../../utils/verifiedAccountsManager");
 
 module.exports = {
   cooldown: 60,

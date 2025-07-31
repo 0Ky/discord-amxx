@@ -1,5 +1,5 @@
 const net = require("net");
-const log = require("../../shared/loggerUtils");
+const log = require("../../utils/loggerUtils");
 const { HOST, PORT } = require("../../config/config");
 const { handleConnection } = require("./handlers/handleConnection");
 const gameServer = require("./handlers/gameServer");

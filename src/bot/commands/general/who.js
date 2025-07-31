@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require("discord.js");
-const { getVerifiedAccounts } = require("../../../shared/verifiedAccountsManager");
+const { getVerifiedAccounts } = require("../../../utils/verifiedAccountsManager");
 const { HLDS_HOSTNAME } = require("../../../config/config");
 
 module.exports = {

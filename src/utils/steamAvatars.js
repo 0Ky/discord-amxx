@@ -1,5 +1,4 @@
 const NodeCache = require('node-cache');
-const axios = require('axios');
 const { XMLParser } = require('fast-xml-parser');
 const log = require('./logger');
 
@@ -15,16 +14,20 @@ async function getSteamAvatar(steamID64) {
   const defaultAvatar = "https://avatars.fastly.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg";
 
   try {
-    const avatarRes = await axios.get(steamProfile + "?xml=1");
+    const profileRes = await fetch(steamProfile + "?xml=1");
+    if (!profileRes.ok) {
+      throw new Error(`HTTP ${profileRes.status} - ${profileRes.statusText}`);
+    }
+
+    const xmlData = await profileRes.text();
     const parser = new XMLParser();
-    let steamAvatar = parser.parse(avatarRes.data).profile.avatarFull;
+    let steamAvatar = parser.parse(xmlData).profile.avatarFull;
 
     // Validate the avatar URL
-    await axios.head(steamAvatar).catch((err) => {
-      if (err.response?.status === 404) {
-        steamAvatar = defaultAvatar;
-      }
-    });
+    const avatarRes = await fetch(steamAvatar, { method: 'HEAD' });
+    if (!avatarRes.ok) {
+      steamAvatar = defaultAvatar;
+    }
 
     // Cache and return the avatar
     avatarCache.set(steamID64, steamAvatar);

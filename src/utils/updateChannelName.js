@@ -61,6 +61,4 @@ async function processQueue(channelId, channel) {
   }
 }
 
-module.exports = {
-  updateChannelName,
-};
+module.exports = { updateChannelName };

@@ -6,6 +6,8 @@ const path = require("node:path");
 const log = require("../utils/logger");
 const assert = require("assert");
 
+const rest = new REST().setToken(DISCORD_TOKEN);
+
 function compareOptions(commandOptions, existingCommandOptions) {
   try {
     // filter out undefined and false values from options,
@@ -27,6 +29,20 @@ function compareOptions(commandOptions, existingCommandOptions) {
   }
 }
 
+async function clearSlashCommands() {
+  try {
+    // Clear guild commands
+    const guildResult = await rest.put(Routes.applicationGuildCommands(DISCORD_CLIENT_ID, DISCORD_SERVER_ID), { body: [] });
+    log.info(`[Slash command] Deleted all guild commands`);
+
+    // Clear global commands
+    const globalResult = await rest.put(Routes.applicationCommands(DISCORD_CLIENT_ID), { body: [] });
+    log.info(`[Slash command] Deleted all global commands`);
+  } catch (error) {
+    log.error(`[Slash command] Failed to delete commands: ${error.message}`);
+  }
+}
+
 async function registerCommands() {
   const commands = [];
   const commandsDir = path.join(__dirname, "/commands");
@@ -43,8 +59,6 @@ async function registerCommands() {
       log.warn(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
     }
   }
-
-  const rest = new REST().setToken(DISCORD_TOKEN);
 
   try {
     log.info("[Slash command] Fetching existing commands to compare...");
@@ -100,4 +114,7 @@ async function registerCommands() {
   }
 }
 
-module.exports = registerCommands;
+module.exports =  {
+  registerCommands,
+  clearSlashCommands
+};

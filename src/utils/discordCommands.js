@@ -16,6 +16,4 @@ function getCommandFiles(dir) {
   return files;
 }
 
-module.exports = {
-    getCommandFiles,
-};
+module.exports = { getCommandFiles };

@@ -15,5 +15,5 @@ function clearGameSocket() {
 module.exports = {
   setGameServerSocket,
   getGameServerSocket,
-  clearGameSocket,
+  clearGameSocket
 };

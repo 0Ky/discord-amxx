@@ -233,6 +233,4 @@ function getCountryCode(langCode) {
 }
 
 // Export the function
-module.exports = {
-    getCountryCode
-};
+module.exports = { getCountryCode };

@@ -2,7 +2,7 @@ const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { DISCORD_TOKEN } = require("./config/config");
 const { loadCommands } = require("./loaders/commandLoader");
 const { loadEvents } = require("./loaders/eventLoader");
-const registerCommands = require("./bot/registerCommands");
+const { registerCommands, clearSlashCommands } = require("./bot/registerCommands");
 const log = require("./utils/logger");
 
 const client = new Client({
@@ -28,6 +28,7 @@ client.interactions = new Collection();
   try {
     loadCommands(client);
     loadEvents(client);
+    // await clearSlashCommands();
     await registerCommands();
     await client.login(DISCORD_TOKEN);
   } catch (err) {

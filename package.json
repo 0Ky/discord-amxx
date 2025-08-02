@@ -18,6 +18,8 @@
     "fast-xml-parser": "5.2.5",
     "js-sha3": "^0.9.3",
     "node-cache": "^5.1.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "steamid": "^2.1.0",
     "uuid": "11.1.0",
     "winston": "^3.17.0"

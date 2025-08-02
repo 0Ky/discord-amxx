@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require("disc
 const log = require("../../../utils/logger");
 const { v4: uuidv4 } = require("uuid");
 const linkCodeManager = require("../../../utils/linkCodeManager");
-const verifiedAccountsManager = require("../../../utils/verifiedAccountsManager");
+const { fetchAccount } = require("../../../utils/verifiedAccountsManager");
 
 module.exports = {
   cooldown: 60,
@@ -11,7 +11,9 @@ module.exports = {
     .setDescription("Generates a code to verify and link your Steam account through in-game")
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
   async execute(interaction) {
-    if (verifiedAccountsManager.isDiscordIdVerified(interaction.user.id)) {
+    const isLinked = !!await fetchAccount({ key: "discordId", value: interaction.user.id });
+
+    if (isLinked) {
       return await interaction.reply({
         content: "Your account is already linked.",
         flags: MessageFlags.Ephemeral,

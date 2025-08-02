@@ -22,7 +22,7 @@ const { formatChatMessage } = require("../../../utils/formatChatMessage");
 const { sendMessageToGameServer } = require("../../../utils/discordMsgToGameServer");
 const { updateChannelName } = require("../../../utils/updateChannelName");
 const { getLinkCode, removeLinkCode, clearCache } = require("../../../utils/linkCodeManager");
-const { addVerifiedAccount, isSteamIdVerified } = require("../../../utils/verifiedAccountsManager");
+const { addVerifiedAccount, fetchAccount } = require("../../../utils/verifiedAccountsManager");
 
 const { validate: validateUUID } = require('uuid');
 const gameServer = require("./gameServer"); // Import gameServer singleton
@@ -128,15 +128,14 @@ async function handleMessage(data, client) {
             ? DISCORD_CHANNEL_CHAT
             : DISCORD_CHANNEL_CHATSUPPORT // any other
         );
-        
-        
+
         if (channel) {
           await channel.send({ embeds: [formattedChatEmbed] });
           log.debug(`Relayed in-game message to Discord`);
         } else {
           log.warn("Channel not found");
         }
-        
+
         break;
 
       }
@@ -227,21 +226,20 @@ async function handleMessage(data, client) {
           return;
         }
 
-
-
-
-
-
         const code = parsed.message;
         if (validateUUID(code)) {
           const linkCode = getLinkCode(code);
           if (linkCode) {
             const { userId } = linkCode;
             const steamId = parsed.authid;
-            if (isSteamIdVerified(steamId)) {
+
+            const isLinked = !!await fetchAccount({ key: "steamId", value: steamId });
+
+            if (isLinked) {
               log.warn(`Steam ID ${steamId} is already linked to a Discord account.`);
               return;
             }
+
             try {
               const guild = client.guilds.cache.get(DISCORD_SERVER_ID);
               const member = await guild.members.cache.get(userId);
@@ -249,7 +247,7 @@ async function handleMessage(data, client) {
                 await member.roles.add(DISCORD_VERIFIED_ROLE);
 
                 // Add the verified account with additional metadata
-                addVerifiedAccount({
+                await addVerifiedAccount({
                   discordId: userId,
                   discordUsername: member.user.tag, // e.g., "User#1234"
                   steamId,
@@ -271,11 +269,11 @@ async function handleMessage(data, client) {
               log.error(`Error linking Steam ID ${steamId} with Discord user ${userId}: ${error.message}`);
             }
           } else {
-            log.warn(`Invalid or expired verification code: ${code}`);
+            log.warn(`Player ${parsed.name} (${parsed.authid}) used an invalid or expired verification code: ${code}`);
           }
         }
         else {
-          log.error("Code not valid.")
+          log.error(`Player ${parsed.name} (${parsed.authid}) used an invalid verify code: ${code}`)
         }
         break;
       }

@@ -4,6 +4,7 @@ const { loadCommands } = require("./loaders/commandLoader");
 const { loadEvents } = require("./loaders/eventLoader");
 const { registerCommands, clearSlashCommands } = require("./bot/registerCommands");
 const log = require("./utils/logger");
+const { initializeDatabase } = require("./utils/database");
 
 const client = new Client({
   intents: [
@@ -26,6 +27,7 @@ client.interactions = new Collection();
 
 (async () => {
   try {
+    await initializeDatabase();
     loadCommands(client);
     loadEvents(client);
     // await clearSlashCommands();

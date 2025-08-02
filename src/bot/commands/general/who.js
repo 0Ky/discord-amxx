@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessageFlags } = require("discord.js");
-const { getVerifiedAccounts } = require("../../../utils/verifiedAccountsManager");
+const { fetchAccount } = require("../../../utils/verifiedAccountsManager");
 const { HLDS_HOSTNAME } = require("../../../config/config");
 
 module.exports = {
@@ -27,13 +27,12 @@ module.exports = {
       return;
     }
 
-    const accounts = getVerifiedAccounts();
     let account;
 
     if (mention) {
-      account = accounts.find((acc) => acc.discordId === mention.id);
+      account = await fetchAccount({ key: "discordId", value: mention.id });
     } else if (steamid) {
-      account = accounts.find((acc) => acc.steamId === steamid);
+      account = await fetchAccount({ key: "steamId", value: steamid });
     }
 
     if (account) {
